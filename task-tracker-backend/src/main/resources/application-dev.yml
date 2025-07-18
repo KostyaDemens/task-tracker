@@ -4,7 +4,11 @@ spring:
     username: postgres
     password: postgres
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: none
   flyway:
     locations: classpath:db/migration
+  token:
+    signing:
+      key: b9166333069fd70560aacd61
