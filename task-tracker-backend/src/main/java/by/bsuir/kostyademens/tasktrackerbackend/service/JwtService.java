@@ -46,6 +46,10 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
     private String buildToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
@@ -65,10 +69,6 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-
-    private String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
