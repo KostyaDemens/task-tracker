@@ -23,14 +23,14 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody UserRegisterDto userRegisterDto, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<Void> register(@RequestBody UserRegisterDto userRegisterDto, HttpServletResponse httpServletResponse) {
         User user = authenticationService.register(userRegisterDto);
 
         String jwtToken = jwtService.generateToken(user);
 
         httpServletResponse.setHeader("Authorization", "Bearer " + jwtToken);
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")

@@ -7,9 +7,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+    open-in-view: false
   flyway:
     locations: classpath:db/migration
 jwt:
-  secret-key: aec497118a6e0a13cfcc1f03302c4147
+  secret-key: f19a8d4e3ad1ae7502d7c79e95cd78d997b96ab3309426c47d604891694dba1aa18363db
   # 1 hour in milliseconds
   expiration-time: 3600000
