@@ -18,11 +18,12 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public User signup(UserRegisterDto userRegisterDto) {
-        User user = new User();
-        user.setEmail(userRegisterDto.getEmail());
-        user.setUsername(userRegisterDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+    public User register(UserRegisterDto userRegisterDto) {
+        User user = User.builder()
+                .email(userRegisterDto.getEmail())
+                .username(userRegisterDto.getUsername())
+                .password(passwordEncoder.encode(userRegisterDto.getPassword()))
+                .build();
 
         return userRepository.save(user);
     }
