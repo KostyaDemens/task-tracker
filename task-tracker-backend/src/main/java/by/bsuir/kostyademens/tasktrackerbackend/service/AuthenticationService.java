@@ -2,6 +2,7 @@ package by.bsuir.kostyademens.tasktrackerbackend.service;
 
 import by.bsuir.kostyademens.tasktrackerbackend.dto.UserLoginDto;
 import by.bsuir.kostyademens.tasktrackerbackend.dto.UserRegisterDto;
+import by.bsuir.kostyademens.tasktrackerbackend.exception.UserAlreadyExistsException;
 import by.bsuir.kostyademens.tasktrackerbackend.model.User;
 import by.bsuir.kostyademens.tasktrackerbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public User register(UserRegisterDto userRegisterDto) {
+        if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
+            throw new UserAlreadyExistsException("User with such email already exists");
+        }
+
         User user = User.builder()
                 .email(userRegisterDto.getEmail())
                 .username(userRegisterDto.getUsername())

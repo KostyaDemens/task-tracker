@@ -1,4 +1,4 @@
-package by.bsuir.kostyademens.tasktrackerbackend.controller;
+package by.bsuir.kostyademens.tasktrackerbackend.controller.user;
 
 import by.bsuir.kostyademens.tasktrackerbackend.dto.UserLoginDto;
 import by.bsuir.kostyademens.tasktrackerbackend.dto.UserRegisterDto;
@@ -8,10 +8,8 @@ import by.bsuir.kostyademens.tasktrackerbackend.service.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -22,13 +20,13 @@ public class AuthenticationController {
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<Void> register(@RequestBody UserRegisterDto userRegisterDto, HttpServletResponse httpServletResponse) {
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody UserRegisterDto userRegisterDto, HttpServletResponse response) {
         User user = authenticationService.register(userRegisterDto);
 
         String jwtToken = jwtService.generateToken(user);
 
-        httpServletResponse.setHeader("Authorization", "Bearer " + jwtToken);
+        response.setHeader("Authorization", "Bearer " + jwtToken);
 
         return ResponseEntity.ok().build();
     }
@@ -43,4 +41,15 @@ public class AuthenticationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        response.setHeader("Authorization", "");
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok().build();
+
+        //TODO Проверить, какие коды доступа везде возвращаем
+    }
+
 }
