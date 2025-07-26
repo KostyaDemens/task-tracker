@@ -36,12 +36,12 @@ public class AuthenticationService {
     public User authenticate(UserLoginDto userLoginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userLoginDto.getEmail(),
+                        userLoginDto.getUsername(),
                         userLoginDto.getPassword()
                 )
         );
 
-        return userRepository.findByEmail(userLoginDto.getEmail())
+        return userRepository.findByUsername(userLoginDto.getUsername())
                 .orElseThrow();
     }
 
