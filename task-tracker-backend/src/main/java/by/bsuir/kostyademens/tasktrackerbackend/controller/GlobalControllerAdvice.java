@@ -30,7 +30,7 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleUserUserAlreadyExistsException(UserAlreadyExistsException exception) {
+    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
         log.error(exception.getMessage(), exception);
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(
