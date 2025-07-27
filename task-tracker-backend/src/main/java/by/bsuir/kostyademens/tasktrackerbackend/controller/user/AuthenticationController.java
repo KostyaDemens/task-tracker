@@ -53,8 +53,6 @@ public class AuthenticationController {
                 .status(HttpStatus.NO_CONTENT)
                 .header(HttpHeaders.AUTHORIZATION, "")
                 .build();
-
-        //TODO Проверить, какие коды доступа везде возвращаем
     }
 
 }
