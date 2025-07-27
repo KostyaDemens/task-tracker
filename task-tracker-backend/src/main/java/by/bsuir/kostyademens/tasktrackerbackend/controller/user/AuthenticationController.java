@@ -5,6 +5,7 @@ import by.bsuir.kostyademens.tasktrackerbackend.dto.UserRegisterDto;
 import by.bsuir.kostyademens.tasktrackerbackend.model.User;
 import by.bsuir.kostyademens.tasktrackerbackend.service.AuthenticationService;
 import by.bsuir.kostyademens.tasktrackerbackend.service.JwtService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<Void> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         User user = authenticationService.register(userRegisterDto);
 
         String jwtToken = jwtService.generateToken(user);
@@ -34,7 +35,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> authenticate(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<Void> authenticate(@Valid @RequestBody UserLoginDto userLoginDto) {
         User user = authenticationService.authenticate(userLoginDto);
 
         String jwtToken = jwtService.generateToken(user);

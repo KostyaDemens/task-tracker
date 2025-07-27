@@ -11,11 +11,12 @@ import lombok.Value;
 public class UserLoginDto {
 
     @Schema(description = "Логин пользователя")
-    @Size(max = 100, message = "Логин пользователя может содеражть максимум 100 символов")
-    @NotBlank(message = "Логин пользователя не может быть пустыми")
+    @Size(min = 5, max = 100, message = "Имя пользователя должно содержать от 5 до 100 символов")
+    @NotBlank(message = "Имя пользователя не может быть пустыми")
     String username;
 
-    @Schema(description = "Пароль")
-    @Size(max = 255, message = "Длина пароля должна быть не более 255 символов")
+    @Schema(description = "Пароль пользователя")
+    @Size(min = 5, max = 255, message = "Пароль пользователя должен содержать от 5 до 255 символов")
+    @NotBlank(message = "Пароль пользователя не может быть пустым")
     String password;
 }

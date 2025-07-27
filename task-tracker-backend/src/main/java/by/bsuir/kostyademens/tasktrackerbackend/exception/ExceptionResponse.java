@@ -1,11 +1,18 @@
 package by.bsuir.kostyademens.tasktrackerbackend.exception;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.time.Instant;
 
-public record ExceptionResponse(
-        int status,
-        String error,
-        String message,
-        Instant timestamp
-) {
+@RequiredArgsConstructor
+@Getter
+public class ExceptionResponse {
+
+    private final int status;
+    private final String error;
+    private final String message;
+    private final Instant timestamp;
+
 }
+
