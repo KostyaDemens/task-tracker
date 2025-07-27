@@ -20,8 +20,16 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public User register(UserRegisterDto userRegisterDto) {
+        if (userRepository.existsByUsername(userRegisterDto.getUsername())) {
+            throw new UserAlreadyExistsException(
+                    "User with username '" + userRegisterDto.getUsername() + "' already exists"
+            );
+        }
+
         if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
-            throw new UserAlreadyExistsException("User with such email already exists");
+            throw new UserAlreadyExistsException(
+                    "User with email '" + userRegisterDto.getEmail() + "' already exists"
+            );
         }
 
         User user = User.builder()

@@ -1,6 +1,7 @@
 package by.bsuir.kostyademens.tasktrackerbackend.controller;
 
 import by.bsuir.kostyademens.tasktrackerbackend.exception.ExceptionResponse;
+import by.bsuir.kostyademens.tasktrackerbackend.exception.UserAlreadyExistsException;
 import by.bsuir.kostyademens.tasktrackerbackend.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
-        log.error("User not found", exception);
+        log.error(exception.getMessage(), exception);
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 HttpStatus.NOT_FOUND.value(),
@@ -26,5 +27,19 @@ public class GlobalControllerAdvice {
         );
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleUserUserAlreadyExistsException(UserAlreadyExistsException exception) {
+        log.error(exception.getMessage(), exception);
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                exception.getMessage(),
+                Instant.now()
+        );
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 }
