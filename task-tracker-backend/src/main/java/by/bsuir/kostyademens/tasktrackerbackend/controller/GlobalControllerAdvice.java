@@ -1,9 +1,6 @@
 package by.bsuir.kostyademens.tasktrackerbackend.controller;
 
-import by.bsuir.kostyademens.tasktrackerbackend.exception.ExceptionResponse;
-import by.bsuir.kostyademens.tasktrackerbackend.exception.ExceptionValidationResponse;
-import by.bsuir.kostyademens.tasktrackerbackend.exception.UserAlreadyExistsException;
-import by.bsuir.kostyademens.tasktrackerbackend.exception.UserNotFoundException;
+import by.bsuir.kostyademens.tasktrackerbackend.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,46 +20,25 @@ import java.util.stream.Collectors;
 public class GlobalControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
+    private ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
         log.error(exception.getMessage(), exception);
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse(
-                HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(),
-                exception.getMessage(),
-                Instant.now()
-        );
-
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+        return buildExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+    private ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
         log.error(exception.getMessage(), exception);
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse(
-                HttpStatus.CONFLICT.value(),
-                HttpStatus.CONFLICT.getReasonPhrase(),
-                exception.getMessage(),
-                Instant.now()
-        );
-
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
+        return buildExceptionResponse(HttpStatus.CONFLICT, exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+    private ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
         log.error(exception.getMessage(), exception);
 
         if (request.getRequestURI().equals("/auth/login")) {
-            ExceptionResponse exceptionResponse = new ExceptionResponse(
-                    HttpStatus.UNAUTHORIZED.value(),
-                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-                    "Неверный логин или пароль",
-                    Instant.now()
-            );
-
-            return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+            return buildExceptionResponse(HttpStatus.UNAUTHORIZED, "Login or password is incorrect");
         }
 
         Map<String, List<String>> errors = exception.getBindingResult()
@@ -76,11 +52,30 @@ public class GlobalControllerAdvice {
         ExceptionResponse exceptionResponse = new ExceptionValidationResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "Ошибка валидации полей",
+                "Validation error",
                 Instant.now(),
                 errors
         );
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(WrongCredentialsException.class)
+    private ResponseEntity<ExceptionResponse> handleWrongCredentialException(WrongCredentialsException exception) {
+        log.error(exception.getMessage(), exception);
+
+        return buildExceptionResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+
+    private ResponseEntity<ExceptionResponse> buildExceptionResponse(HttpStatus httpStatus, String message) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(
+                        httpStatus.value(),
+                        httpStatus.getReasonPhrase(),
+                        message,
+                        Instant.now()
+                ),
+                httpStatus
+        );
     }
 }
