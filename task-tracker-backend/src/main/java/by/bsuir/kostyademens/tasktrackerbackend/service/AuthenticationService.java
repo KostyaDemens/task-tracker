@@ -3,13 +3,13 @@ package by.bsuir.kostyademens.tasktrackerbackend.service;
 import by.bsuir.kostyademens.tasktrackerbackend.dto.UserLoginDto;
 import by.bsuir.kostyademens.tasktrackerbackend.dto.UserRegisterDto;
 import by.bsuir.kostyademens.tasktrackerbackend.exception.UserAlreadyExistsException;
-import by.bsuir.kostyademens.tasktrackerbackend.exception.UserNotFoundException;
 import by.bsuir.kostyademens.tasktrackerbackend.exception.WrongCredentialsException;
 import by.bsuir.kostyademens.tasktrackerbackend.model.User;
 import by.bsuir.kostyademens.tasktrackerbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,18 +46,17 @@ public class AuthenticationService {
 
     public User authenticate(UserLoginDto userLoginDto) {
         try {
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userLoginDto.getUsername(),
                             userLoginDto.getPassword()
                     )
             );
+
+            return (User) authentication.getPrincipal();
         } catch (AuthenticationException e) {
             throw new WrongCredentialsException("Login or password is incorrect");
         }
-
-        return userRepository.findByUsername(userLoginDto.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("User with username '" + userLoginDto.getUsername() + "' not found"));
     }
 
 

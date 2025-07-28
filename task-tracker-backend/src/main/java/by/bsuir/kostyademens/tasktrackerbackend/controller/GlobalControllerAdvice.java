@@ -21,21 +21,21 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
     private ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
-        log.error(exception.getMessage(), exception);
+        log.warn(exception.getMessage(), exception);
 
         return buildExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     private ResponseEntity<ExceptionResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
-        log.error(exception.getMessage(), exception);
+        log.warn(exception.getMessage(), exception);
 
         return buildExceptionResponse(HttpStatus.CONFLICT, exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
-        log.error(exception.getMessage(), exception);
+        log.warn(exception.getMessage(), exception);
 
         if (request.getRequestURI().equals("/auth/login")) {
             return buildExceptionResponse(HttpStatus.UNAUTHORIZED, "Login or password is incorrect");
@@ -62,7 +62,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(WrongCredentialsException.class)
     private ResponseEntity<ExceptionResponse> handleWrongCredentialException(WrongCredentialsException exception) {
-        log.error(exception.getMessage(), exception);
+        log.warn(exception.getMessage(), exception);
 
         return buildExceptionResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
