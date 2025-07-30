@@ -1,7 +1,7 @@
 package by.bsuir.kostyademens.tasktrackerbackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,20 +21,22 @@ public class User implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(name = "username", unique = true)
     private String username;
 
-    @NotNull
+    @NotBlank
     @Column(name = "password")
     private String password;
 
-    @NotNull
+    @NotBlank
     @Column(name = "email", unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
