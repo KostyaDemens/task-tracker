@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "tasks")
 public class Task {
 
     @Id
@@ -23,16 +23,20 @@ public class Task {
     private Long id;
 
     @NotBlank
-    @Column(name = "username", unique = true)
+    @Column(name = "title", unique = true)
     private String title;
 
     @NotBlank
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "status")
     private TaskStatus status;
 
+    @Column(name = "createdAt")
     private LocalDateTime createdAt;
 
+    @Column(name = "isDone")
     private boolean isDone;
 
     @ManyToOne
