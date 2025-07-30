@@ -33,10 +33,10 @@ public class Task {
     @Column(name = "status")
     private TaskStatus status;
 
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "isDone")
+    @Column(name = "is_done")
     private boolean isDone;
 
     @ManyToOne
