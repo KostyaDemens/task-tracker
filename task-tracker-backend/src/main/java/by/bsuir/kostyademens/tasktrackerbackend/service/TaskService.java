@@ -3,6 +3,7 @@ package by.bsuir.kostyademens.tasktrackerbackend.service;
 import by.bsuir.kostyademens.tasktrackerbackend.TaskStatus;
 import by.bsuir.kostyademens.tasktrackerbackend.dto.TaskDto;
 import by.bsuir.kostyademens.tasktrackerbackend.model.Task;
+import by.bsuir.kostyademens.tasktrackerbackend.model.User;
 import by.bsuir.kostyademens.tasktrackerbackend.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,14 @@ public class TaskService {
                 )).toList();
     }
 
-    public void add(TaskDto taskDto) {
+    public void add(TaskDto taskDto, User user) {
         taskRepository.save(Task.builder()
                 .title(taskDto.getTitle())
                 .description(taskDto.getDescription())
                 .status(TaskStatus.NEW)
                 .createdAt(LocalDateTime.now())
                 .isDone(false)
+                .user(user)
                 .build());
     }
 

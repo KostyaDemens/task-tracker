@@ -19,7 +19,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
-    public ResponseEntity<List<TaskDto>> getAllTasks(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<TaskDto>> getAll(@AuthenticationPrincipal User user) {
 
         List<TaskDto> tasks = taskService.getAllTasks(user.getId());
 
@@ -27,15 +27,15 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addTask(@Valid TaskDto taskDto) {
+    public ResponseEntity<Void> add(@Valid @RequestBody TaskDto taskDto, @AuthenticationPrincipal User user) {
 
-        taskService.add(taskDto);
+        taskService.add(taskDto, user);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteTask(@RequestParam Long taskId) {
+    public ResponseEntity<Void> delete(@RequestParam Long taskId) {
 
         taskService.delete(taskId);
 

@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 @Value
-@Schema(name = "UserLoginDto",
-        description = "Данные для аутентификации пользователя")
+@Schema(name = "TaskDto",
+        description = "Пользовательская задача")
 public class TaskDto {
 
     @Schema(description = "Заголовок задачи")
