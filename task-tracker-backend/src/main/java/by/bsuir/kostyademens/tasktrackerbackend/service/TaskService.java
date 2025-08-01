@@ -1,6 +1,8 @@
 package by.bsuir.kostyademens.tasktrackerbackend.service;
 
+import by.bsuir.kostyademens.tasktrackerbackend.TaskMapper;
 import by.bsuir.kostyademens.tasktrackerbackend.TaskStatus;
+import by.bsuir.kostyademens.tasktrackerbackend.dto.CreateTaskDto;
 import by.bsuir.kostyademens.tasktrackerbackend.dto.TaskDto;
 import by.bsuir.kostyademens.tasktrackerbackend.model.Task;
 import by.bsuir.kostyademens.tasktrackerbackend.model.User;
@@ -16,17 +18,16 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-
+    private final TaskMapper taskMapper;
 
     public List<TaskDto> getAllTasks(Long userId) {
         return taskRepository.findAllByUserId(userId)
-                .stream().map(task -> new TaskDto(
-                        task.getTitle(),
-                        task.getDescription()
-                )).toList();
+                .stream()
+                .map(taskMapper::taskToTaskDto)
+                .toList();
     }
 
-    public void add(TaskDto taskDto, User user) {
+    public void add(CreateTaskDto taskDto, User user) {
         taskRepository.save(Task.builder()
                 .title(taskDto.getTitle())
                 .description(taskDto.getDescription())

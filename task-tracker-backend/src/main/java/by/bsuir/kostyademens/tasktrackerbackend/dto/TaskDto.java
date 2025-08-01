@@ -1,22 +1,34 @@
 package by.bsuir.kostyademens.tasktrackerbackend.dto;
 
+import by.bsuir.kostyademens.tasktrackerbackend.TaskStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.Value;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Value
 @Schema(name = "TaskDto",
         description = "Пользовательская задача")
 public class TaskDto {
 
-    @Schema(description = "Заголовок задачи")
-    @Size(max = 100, message = "Заголовок задачи может содержать до 100 символов")
-    @NotBlank(message = "Заголовок задачи не может быть пустым")
+    @Schema(name = "ID задачи")
+    Long id;
+
+    @Schema(name = "Заголовок задачи")
     String title;
 
-    @Schema(description = "Описание задачи")
-    @NotBlank(message = "Описание задачи не может быть пустым")
+    @Schema(name = "Описание задачи")
     String description;
 
+    @Schema(name = "Статус задачи")
+    TaskStatus status;
+
+    @Schema(name = "Время создания задачи")
+    LocalDateTime createdAt;
+
+    @Schema(name = "Флаг. Выполнена задача или нет")
+    boolean isDone;
+
 }
+
+
