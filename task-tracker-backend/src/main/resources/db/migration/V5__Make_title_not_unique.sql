@@ -1,0 +1,2 @@
+ALTER TABLE tasks
+DROP CONSTRAINT IF EXISTS tasks_title_key;
